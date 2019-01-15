@@ -2,75 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css'
 
-function Square(props) {
-    return (
-        <button
-            className="square"
-            onClick={props.onClick}
-        >
-            {props.value}
-        </button>
-    );
-}
+import Board from './components/Board'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Chip from '@material-ui/core/Chip';
 
-class Board extends React.Component {
-
-    constructor(props){
-        super(props);
-        this.boardSize = 3;
-    }
-
-    renderSquare(i) {
-        return (
-            <Square
-                key={i}
-                value={this.props.squares[i]}
-                onClick={ () => {this.props.onClick(i)} }
-            />
-        );
-    }
-
-    render() {
-
-        let boardRows = [];
-
-        for(let row = 0; row < this.boardSize; row++){
-            let boardCols = [];
-
-            for(let col = 0; col < this.boardSize; col++){
-                boardCols.push(this.renderSquare(row * this.boardSize + col));
-            }
-
-            boardRows.push(
-                <div className={"board-row"} key={row}>
-                    {boardCols}
-                </div>
-            );
-        }
-
-        return <div>{boardRows}</div>;
-
-        /*return (
-            <div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
-            </div>
-        );*/
-    }
-}
+const chipStyle = {
+    margin: "4px 0",
+    fontSize: "8px",
+};
+const appBarStyle = {
+    fontSize: '12px',
+    color: 'white',
+    textAlign: 'center',
+};
 
 class Game extends React.Component {
 
@@ -130,11 +76,17 @@ class Game extends React.Component {
 
            return (
                <li key={move}>
-                   <button
+                   {/*<button
                        onClick={() => this.jumpTo(move)}
                        className = {this.state.stepNumber === move ? 'selected-list-item' : ''}
                    >{desc}
-                   </button>
+                   </button>*/}
+                   <Chip
+                       style={chipStyle}
+                       label={desc}
+                       className = {this.state.stepNumber === move ? 'selected-list-item' : ''}
+                       onClick={() => this.jumpTo(move)}
+                   />
                </li>
            );
         });
@@ -149,16 +101,26 @@ class Game extends React.Component {
         }
 
         return (
-            <div className="game">
-                <div className="game-board">
-                    <Board
-                        squares = {current.squares}
-                        onClick = {(i) => this.handleClick(i)}
-                    />
-                </div>
-                <div className="game-info">
-                    <div>{status}</div>
-                    <ol>{moves}</ol>
+            <div>
+                <AppBar position={"static"} style={{marginBottom: '20px'}}>
+                    <Toolbar style={{minHeight: '20px'}}>
+                        <Typography style={appBarStyle}>
+                            Tic Tac Toe
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+
+                <div className="game">
+                    <div className="game-board">
+                        <Board
+                            squares = {current.squares}
+                            onClick = {(i) => this.handleClick(i)}
+                        />
+                    </div>
+                    <div className="game-info">
+                        <div>{status}</div>
+                        <ol>{moves}</ol>
+                    </div>
                 </div>
             </div>
         );

@@ -50,5 +50,5 @@ ol, ul {
 }
 
 .selected-list-item{
-    font-weight: bold;
+    font-weight: bold !important;
 }
