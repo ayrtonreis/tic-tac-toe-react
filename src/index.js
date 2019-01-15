@@ -65,22 +65,28 @@ class Game extends React.Component {
     }
 
     render() {
-        const history = this.state.history;
-        const current = history[this.state.stepNumber];
+
+        const {
+            history,
+			xIsNext,
+			stepNumber,
+        } = this.state;
+
+        // const history = this.state.history;
+        const current =history[stepNumber];  // history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
 
-        const moves = history.map((step, move) => {
+        // feedback
+        // this could be directly in the tree (which spares the reader from finding it elsewhere)
+        // in this case the code is quite short, so I would put it there, but if it was bigger, I'd agree in putting it
+        // here or even in a class method or (further) in another component
+        const moves = history.map(({posCol, posRow}, move) => {
            const desc = move ?
-               'Go to move #' + move + ' (x: ' + step.posCol + ', y: ' + step.posRow+ ')':
+			   `Go to move #${move} (x: ${posCol}, y: ${posRow})`:  // 'Go to move #' + move + ' (x: ' + step.posCol + ', y: ' + step.posRow+ ')':
                'Go to game start';
 
            return (
                <li key={move}>
-                   {/*<button
-                       onClick={() => this.jumpTo(move)}
-                       className = {this.state.stepNumber === move ? 'selected-list-item' : ''}
-                   >{desc}
-                   </button>*/}
                    <Chip
                        style={chipStyle}
                        label={desc}
@@ -91,14 +97,16 @@ class Game extends React.Component {
            );
         });
 
-        let status;
-
-        if(winner){
-            status = 'Winner: ' + winner;
-        }
-        else{
-            status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
-        }
+        // let status;
+        // if(winner){
+        //     status = 'Winner: ' + winner;
+        // }
+        // else{
+        //     status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+        // }
+        const status = !!winner
+            ? `Winner: ${winner}`
+            : `Next player: ${xIsNext ? 'X' : 'O'}`;
 
         return (
             <div>
@@ -146,8 +154,9 @@ function calculateWinner(squares){
             [2, 4, 6],
         ];
 
-    for(let i = 0; i < lines.length; i++){
-        const [a, b, c] = lines[i];
+    for (let [a, b, c] of lines) {
+    // for(let i = 0; i < lines.length; i++){
+    //     const [a, b, c] = lines[i];
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]){
             return squares[a];
         }

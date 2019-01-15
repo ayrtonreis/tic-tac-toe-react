@@ -6,37 +6,62 @@ class Board extends React.Component {
     constructor(props){
         super(props);
         this.boardSize = 3;
-    }
+
+        // feedback this isn't necessary because renderSquare doesn't use the state, but it's a good practice to add it anyway
+		this.renderSquare = this.renderSquare.bind(this);
+	}
 
     renderSquare(i) {
+        const {squares, onClick} = this.props;
+
         return (
             <Square
                 key={i}
-                value={this.props.squares[i]}
-                onClick={ () => {this.props.onClick(i)} }
+                value={squares[i]}
+                onClick={() => onClick(i)}
             />
         );
     }
 
     render() {
 
-        let boardRows = [];
+        return (
+            <div>
+                {Array(this.boardSize).fill(null).map((_, row) =>
 
-        for(let row = 0; row < this.boardSize; row++){
-            let boardCols = [];
+					<div className={"board-row"} key={row}>
 
-            for(let col = 0; col < this.boardSize; col++){
-                boardCols.push(this.renderSquare(row * this.boardSize + col));
-            }
+						{Array(this.boardSize).fill(null).map((_, col) =>
 
-            boardRows.push(
-                <div className={"board-row"} key={row}>
-                    {boardCols}
-                </div>
-            );
-        }
+							this.renderSquare(row * this.boardSize + col)
 
-        return <div>{boardRows}</div>;
+                        )}
+
+					</div>
+
+                )}
+            </div>
+        );
+
+        // feedback - this way is fine, but it's rather more natural like the one over here
+
+        // let boardRows = [];
+		//
+        // for(let row = 0; row < this.boardSize; row++){
+        //     let boardCols = [];
+		//
+        //     for(let col = 0; col < this.boardSize; col++){
+        //         boardCols.push(this.renderSquare(row * this.boardSize + col));
+        //     }
+		//
+        //     boardRows.push(
+        //         <div className={"board-row"} key={row}>
+        //             {boardCols}
+        //         </div>
+        //     );
+        // }
+		//
+        // return <div>{boardRows}</div>;
 
         /*return (
             <div>
